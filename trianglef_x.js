@@ -1,3 +1,5 @@
+
+/* 삼각함수 그래프 */
 var graph;
 var ball;
 var graphx;

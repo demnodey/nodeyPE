@@ -1,4 +1,4 @@
-
+/* 벽충돌 감지 원한개 */
 'use strict';
 var objects = [];
 function setup(){
@@ -52,14 +52,5 @@ Polygon.prototype.update = function(){
     }else if(this.y < 20){
         this.vy = -this.vy;
     }
-
-    for(var key in objects){
-       var item = objects[key];
-       var afterItemPosition = {
-           x : item.x + item.vx,
-           y : item.y + item.vy
-       };
-    }
-
    
 }

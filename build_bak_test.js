@@ -1,4 +1,4 @@
-//동공지진 
+// 동공지진 블로그 테스트
 
 function setup(){
     createCanvas(200, 200);

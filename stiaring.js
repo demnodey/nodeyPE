@@ -1,4 +1,4 @@
-
+/* 동서남북 에 맞는 가운데 회전축과 왕복운동 */
 'use strict';
 var objects = [];
 var angle = 0;

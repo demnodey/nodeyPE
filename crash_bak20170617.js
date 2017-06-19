@@ -1,4 +1,4 @@
-/* 도형 충돌에 대한 운동보존 법칙 */
+/* 두 원형 충돌감지 */ 
 
 var ab , bb;
 
@@ -21,14 +21,13 @@ function draw(){
 function Aball(){
     this.x = width/2;
     this.y = height/2;
-    this.size = 50;
+    this.size = 120;
     this.vx = 2;
     this.vy = 3;
-    this.wall = this.size / 2;
 }
 
 Aball.prototype.render = function(){
-    //this.update();
+    this.update();
     fill(255,0,0);
     ellipse(this.x, this.y, this.size, this.size);
    
@@ -39,8 +38,8 @@ Aball.prototype.update = function(){
     this.x += this.vx;
     this.y += this.vy;
 
-    if(this.x > width - this.wall || this.x < this.wall){this.vx = -this.vx;}
-    if(this.y > height - this.wall || this.y < this.wall){this.vy = -this.vy;}
+    if(this.x > width - 60 || this.x < 60){this.vx = -this.vx;}
+    if(this.y > height - 60 || this.y < 60){this.vy = -this.vy;}
 
     var distancX = Math.pow(this.x - bb.x,2);
     var distancY = Math.pow(this.y - bb.y,2);
@@ -59,12 +58,11 @@ Aball.prototype.update = function(){
 }
 
 function Bball(){
-    this.x = 20;
-    this.y = height/2 - 30;
+    this.x = random(20 , width - 20);
+    this.y = 20;
     this.size = 25;
-    this.mess = 2;
-    this.vx = 2;
-    this.vy = 0;
+    this.vx = 3;
+    this.vy = 2;
 }
 
 Bball.prototype.render = function(){
@@ -74,26 +72,24 @@ Bball.prototype.render = function(){
 }
 
 Bball.prototype.update = function(){
-   
+    //console.log(ab);
     this.x += this.vx;
     this.y += this.vy;
 
     if(this.x > width - 10 || this.x < 10){this.vx = -this.vx;}
     if(this.y > height - 10 || this.y < 10){this.vy = -this.vy;}
 
-    var dx = Math.pow(this.x - ab.x,2);
-    var dy = Math.pow(this.y - ab.y,2);
+    var distancX = Math.pow(this.x - ab.x,2);
+    var distancY = Math.pow(this.y - ab.y,2);
 
     var After = {
-        MoveBetween : Math.sqrt(dx + dy) ,
+        MoveBetween : Math.sqrt(distancX + distancY) ,
         Between : ab.size/2 + this.size/2    
     }
 
-    var radianX = -cos(this.x - ab.x/After.Between);
-    var radianY = -sin(this.y - ab.y/After.Between);
-
     if(After.MoveBetween < After.Between){
-      //this.vy = radianX;
-     // this.vx = radianY;
+      
+        this.vx = -this.vx;
+        this.vy = -this.vy;
     }
 }

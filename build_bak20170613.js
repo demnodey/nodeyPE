@@ -1,3 +1,4 @@
+/* 다중 원형 벽충돌감지 */
 var objects = [];
 var ball;
 function setup(){
