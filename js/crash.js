@@ -21,9 +21,9 @@ function draw(){
 function Aball(){
     this.x = width/2;
     this.y = height/2;
-    this.size = 50;
-    this.vx = 2;
-    this.vy = 3;
+    this.size = 130;
+    this.vx = 0;
+    this.vy = 0;
     this.wall = this.size / 2;
 }
 
@@ -60,7 +60,7 @@ Aball.prototype.update = function(){
 
 function Bball(){
     this.x = 20;
-    this.y = height/2 - 30;
+    this.y = height/2 - 75;
     this.size = 25;
     this.mess = 2;
     this.vx = 2;
@@ -89,11 +89,8 @@ Bball.prototype.update = function(){
         Between : ab.size/2 + this.size/2    
     }
 
-    var radianX = -cos(this.x - ab.x/After.Between);
-    var radianY = -sin(this.y - ab.y/After.Between);
-
     if(After.MoveBetween < After.Between){
-      //this.vy = radianX;
-     // this.vx = radianY;
+        this.vx = this.vx * cos(120) + ab.vx * cos(0);
+        this.vy = this.vy * sin(120) - ab.vy * sin(0);
     }
 }
