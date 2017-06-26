@@ -1,4 +1,3 @@
-
 var ballA; //Ball A
 var ballB; //Ball B
 var e = 1; //elastic modulus
