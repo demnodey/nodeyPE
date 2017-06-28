@@ -1,15 +1,16 @@
-var g = 0.9800623;
-var box , score;
+var box , score, hitSound;
 var rain = [];
-
+var item = [];
 
 function setup(){
     background(255,255,255);
     createCanvas(windowWidth,600);
     rain.push(new Rain);
+    item.push(new DropItem); 
     score = new Score();
     box = new Player();
     box.setStart();
+    backSound.loop();
     noStroke();
 }
 
@@ -17,19 +18,42 @@ function draw(){
     background(0,0,0);
     score.render();
     box.render();
-     for(var j = 0; j < rain.length; j++){
+
+    for(var j = 0; j < rain.length; j++){
         rain[j].render();
     }
 
-    if(frameCount%150 == 0){
-        render()
+    for(var i = 0; i < item.length; i++){
+        item[i].render();
+    }
+
+    if(frameCount%200 == 0){
+        addRain();
+    }
+
+    if(frameCount%1000 == 0){ 
+        addItem(); 
+    }
+
+}
+
+function addRain(){
+    for(var i = 0; i < 2; i++){
+        rain.push(new Rain);
     }
 }
 
-function render(){
+function addItem(){
     for(var i = 0; i < 1; i++){
-        rain.push(new Rain);
+        item.push(new DropItem);
     }
+}
+
+function preload(){
+    hitSound = loadSound('asset/play_hit.mp3');
+    hitSound.setVolume(0.1);
+    backSound = loadSound('asset/background_rain.mp3');
+    backSound.setVolume(0.2);
 }
 
 class Score{
@@ -77,6 +101,7 @@ class Rain{
         if(box.y < this.y + this.h + 10 ){
             if(box.hp != 0){
                 if(box.x < this.x && box.x + box.size > this.x + this.w){
+                    hitSound.play();
                     this.stop();
                     score.count -= 5;
                 }else{
@@ -94,7 +119,6 @@ class Rain{
         box.hp -= 10;
     }
 }
-
 
 class Player{
 
@@ -143,5 +167,50 @@ class Player{
         fill(255,0,0);
         rect(20 , 20 , this.hp * 3 , 30);
     }
-
 }
+
+class DropItem{
+    constructor(){
+        this.x = 0;
+        this.sx = random(150, width -150);
+        this.y = -100;
+        this.size = 20;
+        this.m = 0.8;
+        this.angle = 0;
+    }
+
+    render(){
+        this.createHeal();
+    }
+
+    createHeal(){
+
+        fill(0,255,0);
+        this.angle += 0.02;
+        this.x = (cos(this.angle)*200) + this.sx;
+        this.y += this.m;
+        rect(this.x , this.y , this.size , this.size, 4);
+
+        if(box.x < this.x && box.x + box.size > this.x + this.size && box.y < this.y + this.size){
+
+             if(box.hp < 90){
+                    box.hp += 10;
+             }else{
+                    box.hp = 100;
+             }
+            this.reset();
+         }
+
+        if(this.y > height){ this.reset(); }
+    }
+
+    createShield(){
+
+    }
+
+    reset(){
+        this.y = -200;
+        this.m = 0;
+    }
+}
+
