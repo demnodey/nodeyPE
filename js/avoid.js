@@ -1,16 +1,17 @@
-var box , score, hitSound;
+var box , score, hitSound, skill;
 var rain = [];
 var item = [];
 
 function setup(){
     background(255,255,255);
     createCanvas(windowWidth,600);
+    skill = new Skill();
     rain.push(new Rain);
     item.push(new DropItem); 
     score = new Score();
     box = new Player();
     box.setStart();
-    backSound.loop();
+    //backSound.loop();
     noStroke();
 }
 
@@ -18,23 +19,21 @@ function draw(){
     background(0,0,0);
     score.render();
     box.render();
+    skill.render();
+    //for(var j = 0; j < rain.length; j++){ rain[j].render(); }
+    for(var i = 0; i < item.length; i++){ item[i].render(); }
 
-    for(var j = 0; j < rain.length; j++){
-        rain[j].render();
-    }
+    if(frameCount%200 == 0){ addRain(); }
+    if(frameCount%1500 == 0){ addItem(); }
 
-    for(var i = 0; i < item.length; i++){
-        item[i].render();
-    }
+}
 
-    if(frameCount%200 == 0){
-        addRain();
-    }
-
-    if(frameCount%1000 == 0){ 
-        addItem(); 
-    }
-
+function preload(){
+    hitSound = loadSound('asset/sound/play_hit.mp3');
+    hitSound.setVolume(0.1);
+    backSound = loadSound('asset/sound/background_rain.mp3');
+    backSound.setVolume(0.2);
+    shieldImg = loadImage('asset/img/shield.png');
 }
 
 function addRain(){
@@ -47,13 +46,6 @@ function addItem(){
     for(var i = 0; i < 1; i++){
         item.push(new DropItem);
     }
-}
-
-function preload(){
-    hitSound = loadSound('asset/play_hit.mp3');
-    hitSound.setVolume(0.1);
-    backSound = loadSound('asset/background_rain.mp3');
-    backSound.setVolume(0.2);
 }
 
 class Score{
@@ -184,7 +176,6 @@ class DropItem{
     }
 
     createHeal(){
-
         fill(0,255,0);
         this.angle += 0.02;
         this.x = (cos(this.angle)*200) + this.sx;
@@ -192,11 +183,12 @@ class DropItem{
         rect(this.x , this.y , this.size , this.size, 4);
 
         if(box.x < this.x && box.x + box.size > this.x + this.size && box.y < this.y + this.size){
-
-             if(box.hp < 90){
-                    box.hp += 10;
-             }else{
-                    box.hp = 100;
+            if(box.hp != 0){
+                if(box.hp < 90){
+                        box.hp += 10;
+                }else{
+                        box.hp = 100;
+                }
              }
             this.reset();
          }
@@ -204,13 +196,26 @@ class DropItem{
         if(this.y > height){ this.reset(); }
     }
 
-    createShield(){
-
-    }
-
     reset(){
         this.y = -200;
         this.m = 0;
+    }
+}
+
+class Skill{
+    constructor(){
+        this.x = 20;
+        this.y = height/2 - 100;
+        this.size = 50;
+    }
+
+    render(){
+        fill(246,180,0);
+        image(shieldImg, this.x, this.y);
+    }
+
+    update(){
+        
     }
 }
 
