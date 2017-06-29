@@ -18,6 +18,7 @@
   "homepage": "https://github.com/demnodey/nodeyPE#readme",
   "dependencies": {
     "express": "^4.15.3",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "p5": "^0.5.11"
   }
 }

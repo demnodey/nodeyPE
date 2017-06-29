@@ -1,4 +1,4 @@
-var box , score, hitSound, skill;
+var box , score, hitSound, skill, playerImg, shieldImg, backSound, hitSound;
 var rain = [];
 var item = [];
 
@@ -20,20 +20,24 @@ function draw(){
     score.render();
     box.render();
     skill.render();
+
     //for(var j = 0; j < rain.length; j++){ rain[j].render(); }
-    for(var i = 0; i < item.length; i++){ item[i].render(); }
-
-    if(frameCount%200 == 0){ addRain(); }
-    if(frameCount%1500 == 0){ addItem(); }
-
+    //for(var i = 0; i < item.length; i++){ item[i].render(); }
+    //if(frameCount%200 == 0){ addRain(); }
+    //if(frameCount%1500 == 0){ addItem(); }
 }
 
 function preload(){
     hitSound = loadSound('asset/sound/play_hit.mp3');
     hitSound.setVolume(0.1);
+    healSound = loadSound('asset/sound/heal_sound.mp3');
+    healSound.setVolume(0.1);
     backSound = loadSound('asset/sound/background_rain.mp3');
     backSound.setVolume(0.2);
+    
     shieldImg = loadImage('asset/img/shield.png');
+    playerImg = loadImage('asset/img/player.png');
+    player2Img = loadImage('asset/img/player2.png');
 }
 
 function addRain(){
@@ -90,7 +94,7 @@ class Rain{
             this.y = -200;
         }
 
-        if(box.y < this.y + this.h + 10 ){
+        if(box.y < this.y + this.h){
             if(box.hp != 0){
                 if(box.x < this.x && box.x + box.size > this.x + this.w){
                     hitSound.play();
@@ -117,9 +121,10 @@ class Player{
     constructor(){
         this.x = 0;
         this.y = 0;
-        this.size = 30;
+        this.size = 45;
         this.speed = 6;
         this.hp = 100;
+        this.img = playerImg;
     }
 
     render(){
@@ -128,8 +133,8 @@ class Player{
         fill(255,255,255);
         textSize(20);
         textAlign(CENTER);
-        text("Player", this.x + this.size / 2 , this.y - this.size + 10);
-        rect(this.x, this.y, this.size, this.size);
+        text("Player", this.x + this.size / 2 , this.y - 20);
+        image(this.img, this.x, this.y, this.size, this.size);
     }
 
     update(){
@@ -144,9 +149,11 @@ class Player{
     controller(){
         if(keyIsDown(LEFT_ARROW)){
             this.x -= this.speed;
+            this.img = player2Img;
         }
         if(keyIsDown(RIGHT_ARROW)){
             this.x += this.speed;
+            this.img = playerImg;
         }
     }
 
@@ -184,6 +191,7 @@ class DropItem{
 
         if(box.x < this.x && box.x + box.size > this.x + this.size && box.y < this.y + this.size){
             if(box.hp != 0){
+                healSound.play();
                 if(box.hp < 90){
                         box.hp += 10;
                 }else{
